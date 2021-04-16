@@ -1,0 +1,92 @@
+Typy zmiennych
+var - ZAPOMINAMY, ŻE ISTNIEJE
+let, const
+
+Typy danych:
+
+	- proste:
+
+		-- string - łańcuch znaków
+		-- number - liczba bez podziału na integer, float, decimal
+		-- boolean - wartość logiczna
+		-- undefined - niezdefiniowany, najczęściej tworzone przez interpreter przy wykonywaniu kodu,
+		   np. deklaracja zmiennej bez inicjalziacji wartości powoduje przypisanie undefined
+		-- null - nie posiada, najczęściej nadawany przez programistę
+		-- symbol - do stworzenie wymaga wywołania funkcji Symbol();
+
+	- referencyjne
+
+		-- obiekty: obiekt, funkcja, tablica ...
+
+let text = 'tekst';
+text
+
+  "tekst"
+
+text = 'nowy tekst';
+text
+
+  "nowy tekst"
+
+const value = 10;
+value = 20 <- błąd
+nie możemy zmieniać wartości zmiennej typu const
+
+charAt() - zwraca znak
+charCodeAt() - zwraca unicode znaku
+x.includes(y) - zwraca true jeżeli x zawiera y
+x.split(' ') - tworzy tablicę ze zmiennej x, dzieląc ją w miejscu wystąpienia spacji
+x.trim() - usuwa nadmiarowe białe znaki ze ZMIENNEJ
+x.toUpperCase() - zwraca wartość zmiennej x zapisaną dużymi literami
+x.toLowerCase() - zwraca wartość zmiennej x zapisaną małymi literami
+
+Template strings
+zapisujemy używając gravisów/akcentów
+`Wartość zmiennej x to: ${x}`
+
+== porównuje tylko wartości np "2" == 2 zwróci true
+=== porównuje wartości i typy np "2" == 2 zwróci false
+
+x.isFinite - sprawdza czy x jest liczbą skończoną
+x.toFixed(y) - zwraca x z y miejsc po przecinku
+Math.floor(x) - zwraca x bez części dziesiętnej
+Math.pow(x,y) - zwraca x do potęgi y
+Math.random() - zwraca wartość pseudolosową z zakresu 0-1
+Boolean(x) - zwraca:
+  jeśli x = 0, '', false -> false
+  jeśli x != 0, '', lub równe true -> true
+
+let x = [0, 1, 'dwa', true]; <- tablica
+x[0] - zwróci zerowy element tablicy
+x[0] = "y" - zastąpi zerowy element tablicy wartością "y"
+x.length - zwraca długość tablicy (liczbę elementów)
+x.join() - zwraca string składający się z elementów tablicy
+x.map()
+x.forEach() - pozwala na wykonanie operacji nakażdym elemencie tablicy
+
+let x = {
+  imie: 'Paweł'
+  nazwisko: 'Brodzik'
+}; <- obiekt
+
+const x = (param) => {return param} <- funkcja, która po podaniu parametru zwróci parametru
+x('test') <- wywołanie funkcji z parametrem 'test'
+
+switch(x) {
+  case 0:
+    //instrukcje do wykonania
+    break;
+  case 1:
+    //instrukcje do wykonania
+    break;
+  default:
+    //instrukcje do wykonania
+} <- blok switch case
+Wykonywane są operacje w zależności on otrzymanego parametru
+W przypadku gdy parametr nie ma określonego warunku (np. x = 2) wykonywany jest kod domyślny
+
+for (let i = 0; i < array.length; i++) {
+}
+for (let i in array) {
+}
+^ pętle po wszystkich elementach tablicy array
