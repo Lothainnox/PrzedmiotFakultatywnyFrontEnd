@@ -1,0 +1,33 @@
+npx create-react-app app --template typescript
+cd app
+yarn start
+
+dodajemy paczki package.json
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
+    "@types/react-redux": "^7.1.8",
+    "@types/react-router": "^5.1.7",
+    "@types/react-router-dom": "^5.1.5",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "reselect": "^4.0.0"
+
+public -> index.html
+head
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+instalacja paczek
+yarn
+
+Zadania na dziś:
+1. Stworzyć oddzielny otypowany komponent przycisk i wyciągnąć jego funkcjonalność onClick jako props.
+Użyć tego komponentu zamiast <button> by zmieniać wyświetlaną liczbę
+2. Dodać przycisk który ustawi wartość początkową dla zmiennej.
+3. Dodać tak zwany 'conditional rendering' dla tekstów w zależności o wartości zmiennej typu number:
+a. Gdy liczba większa od 10 wyświetlić tekst 'Liczba jest większa od 10';
+b. Gdy liczba mniejsza od -10 wyświetlić tekst 'Liczba jest mniejsza od -10';
+c. Gdy liczba jest większa od 15 schować tekst z pkt a i wyświetlnić tekst 'Liczba przekroczona'
