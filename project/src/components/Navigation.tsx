@@ -1,5 +1,4 @@
 import React from 'react';
-// import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import { Drawer, Button, List, ListItem, ListItemText } from '@material-ui/core';
 import { useHistory } from 'react-router';
