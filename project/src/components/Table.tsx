@@ -13,6 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { Book } from '../store/reducers/books.reducer';
+import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router';
+import { Restaurant } from '../store/reducers/restaurants.reducer';
+import { Movie } from '../store/reducers/movies.reducer';
 
 const useRowStyles = makeStyles({
    root: {
@@ -22,40 +27,53 @@ const useRowStyles = makeStyles({
    },
 });
 
-interface TableInterface {
-   type?: string;
+export type itemTypes = Book | Restaurant | Movie;
+
+export interface TableInterface {
+   item: itemTypes[];
+   type: string;
+   onDelete?: (item: itemTypes) => void;
 }
 
-const CollapsibleTable: React.FunctionComponent<TableInterface> = ({ type }) => {
-   let rows = type === "restaurant" ? restaurants : type === "movies" ? movies : books
+const CollapsibleTable: React.FunctionComponent<TableInterface> = ({ item, type, onDelete }) => {
    return (
       <TableContainer component={Paper}>
          <Table aria-label="collapsible table">
             <TableHead>
                <TableRow>
                   <TableCell />
-                  <TableCell>{type === "restaurant" ? "Nazwa" : "Tytuł"}</TableCell>
-                  <TableCell align="center">{type === "restaurant" ? "Adres" : "Autor"}</TableCell>
-                  <TableCell align="center">{type === "restaurant" ? "Oczekiwanie na posiłek (minuty)" : "Rok"}</TableCell>
+                  <TableCell>{type === 'restaurant' ? 'Nazwa' : 'Tytuł'}</TableCell>
+                  <TableCell align="center">{type === 'restaurant' ? 'Adres' : 'Autor'}</TableCell>
+                  <TableCell align="center">
+                     {type === 'restaurant' ? 'Oczekiwanie na posiłek (minuty)' : 'Rok'}
+                  </TableCell>
                   <TableCell align="center">Ocena</TableCell>
+                  <TableCell align="center">Akcje</TableCell>
                </TableRow>
             </TableHead>
             <TableBody>
-               {rows.map((row) => (
-                  <Row key={row.param1} row={row} />
+               {item.map((row: itemTypes) => (
+                  <Row key={row.id} row={row} onDelete={onDelete} type={type} />
                ))}
             </TableBody>
          </Table>
       </TableContainer>
    );
-}
+};
 
 export default CollapsibleTable;
 
-function Row(props: { row: ReturnType<typeof createData> }) {
+function Row(props: { row: itemTypes; onDelete: any; type: string }) {
    const { row } = props;
    const [open, setOpen] = React.useState(false);
    const classes = useRowStyles();
+   const history = useHistory();
+
+   const deleteItem = () => {
+      if (props.onDelete) {
+         props.onDelete(row);
+      }
+   };
 
    return (
       <React.Fragment>
@@ -65,10 +83,40 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                   {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                </IconButton>
             </TableCell>
-            <TableCell component="th" scope="row">{row.param1}</TableCell>
-            <TableCell align="center">{row.param2}</TableCell>
-            <TableCell align="center">{row.param3}</TableCell>
-            <TableCell align="center">{row.param4}</TableCell>
+            <TableCell component="th" scope="row">
+               {'name' in row && row.name.length !== 0
+                  ? row.name
+                  : 'title' in row && row.title.length !== 0
+                  ? row.title
+                  : null}
+            </TableCell>
+            <TableCell align="center">
+               {'address' in row && row.address.length !== 0
+                  ? row.address
+                  : 'author' in row && row.author.length !== 0
+                  ? row.author
+                  : null}
+            </TableCell>
+            <TableCell align="center">
+               {'waittime' in row && row.waittime !== 0
+                  ? row.waittime
+                  : 'year' in row && row.year !== 0
+                  ? row.year
+                  : null}
+            </TableCell>
+            <TableCell align="center">{row.rate}</TableCell>
+            <TableCell align="center">
+               <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => history.push(`/${props.type}/${row.id}`)}
+               >
+                  edit
+               </Button>
+               <Button variant="outlined" color="secondary" onClick={deleteItem}>
+                  delete
+               </Button>
+            </TableCell>
          </TableRow>
          <TableRow>
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -79,15 +127,10 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                      </Typography>
                      <Table size="small" aria-label="purchases">
                         <TableHead>
-                           <TableRow>
-                           </TableRow>
+                           <TableRow></TableRow>
                         </TableHead>
                         <TableBody>
-                           {row.dropdown.map((dropdownRow) => (
-                              <TableRow>
-                                 {dropdownRow.description}
-                              </TableRow>
-                           ))}
+                           <TableRow>{row.description}</TableRow>
                         </TableBody>
                      </Table>
                   </Box>
@@ -97,45 +140,3 @@ function Row(props: { row: ReturnType<typeof createData> }) {
       </React.Fragment>
    );
 }
-
-function createData(
-   param1: string,
-   param2: string,
-   param3: number,
-   param4: number,
-   description: string,
-) {
-   return {
-      param1,
-      param2,
-      param3,
-      param4,
-      dropdown: [
-         {description}
-      ],
-   };
-}
-
-const movies = [
-   createData('Open water', "Chris Kentis", 2003, 7, "Opis 1"),
-   createData('Donnie Darko', "Richard Kelly", 2001, 6, "Opis 2"),
-   createData('Edward Scissorhands', "Tim Burton", 1990, 4, "Opis 3"),
-   createData('Saw', "James Wan", 2004, 6, "Opis 4"),
-   createData("Lucky Number Slevin", "Paul McGuigan", 2006, 5, "Opis 5"),
-];
-
-const books = [
-   createData('Champion', "Marie Lu", 2014, 9, "Opis 1"),
-   createData('Bird Box', "Josh Malerman", 2014, 8, "Opis 2"),
-   createData('Beastly', "Alex Flinn", 2010, 9, "Opis 3"),
-   createData('I\'ll Give You the Sun', "Jandy Nelson", 2015, 10, "Opis 4"),
-   createData('Enduring Love', "Ian McEwan", 1998, 7, "Opis 5"),
-];
-
-const restaurants = [
-   createData('Happy London', "25-29 Coventry St, London", 20, 9, "Opis 1"),
-   createData('BRGR LDN', "244 York Way, London", 30, 10, "Opis 2"),
-   createData('La Ferme London', "154 Regent's Park Rd, London", 15, 8, "Opis 3"),
-   createData('Hazara Restaurants', "44 Belsize Ln, Belsize Park, London", 20, 10, "Opis 4"),
-   createData('Barrafina', "Stable St, London", 25, 8, "Opis 5"),
-];
